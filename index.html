@@ -476,19 +476,13 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
   html { scroll-behavior: auto; }
 }
 
-/* Phones: the lit course card. Mint liquid with a wavy surface pours into the card from
-   below and drains out of the previous one, sloshing as it moves; then the button turns pink.
-   Only transform, mask position and colors move. */
+/* Phones: the lit course card. The mint fill sweeps in from the right edge to the left,
+   and sweeps out of the previous card toward the left; then the button turns pink.
+   Only transform and colors move. */
 @media (max-width: 760px) and (prefers-reduced-motion: no-preference) {
   .courses .course { transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s ease !important; }
-  .courses .course::before {
-    inset: -18px 0 0; transform: translateY(calc(100% + 4px));
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 18' preserveAspectRatio='none'%3E%3Cpath d='M0 9 C20 0 40 0 60 9 S100 18 120 9 V18 H0Z'/%3E%3C/svg%3E") 0 0 / 160px 18px repeat-x, linear-gradient(#000, #000) 0 17px / 100% 100% no-repeat;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 18' preserveAspectRatio='none'%3E%3Cpath d='M0 9 C20 0 40 0 60 9 S100 18 120 9 V18 H0Z'/%3E%3C/svg%3E") 0 0 / 160px 18px repeat-x, linear-gradient(#000, #000) 0 17px / 100% 100% no-repeat;
-    transition: transform .8s cubic-bezier(.45,.05,.25,1), -webkit-mask-position .8s ease-out, mask-position .8s ease-out !important;
-  }
-  .courses .course.hot::before { transform: translateY(0);
-    -webkit-mask-position: 240px 0, 0 17px; mask-position: 240px 0, 0 17px; }
+  .courses .course::before { transform: scaleX(0); transform-origin: left; transition: transform .6s cubic-bezier(.65,0,.35,1) !important; }
+  .courses .course.hot::before { transform: scaleX(1); transform-origin: right; }
   .courses .course .btn.ghost { transition: background-color .3s ease .45s, color .3s ease .45s, border-color .3s ease .45s, transform .4s cubic-bezier(.2,.9,.3,1.5) .45s !important; }
   .courses .course h3, .courses .course p, .courses .course .tag { transition: color .3s ease .2s !important; }
   .courses .course.hot { --lift: -6px; box-shadow: 0 24px 40px -24px rgba(44,122,95,.6); }
