@@ -462,10 +462,12 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+/* Reduced motion, and all phones: no animations so scrolling stays smooth */
+@media (prefers-reduced-motion: reduce), (max-width: 760px) {
   .rv.pre { transform: none; opacity: 1; }
   .about .big em { background-size: 100% 100%; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  .course { will-change: auto; }
   html { scroll-behavior: auto; }
 }
 </style>
@@ -776,7 +778,8 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
   });
   // Scroll reveal: only things below the first screen start offset, and they stay visible
   var targets = document.querySelectorAll('.course, .step, .aud > div, .cta-band .wrap, .about .txt, .about .big, form .field');
-  if ('IntersectionObserver' in window && !reduce) {
+  var still = reduce || matchMedia('(max-width: 760px)').matches;
+  if ('IntersectionObserver' in window && !still) {
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (en) {
         if (!en.isIntersecting) return;
