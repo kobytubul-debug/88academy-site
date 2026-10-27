@@ -227,6 +227,11 @@ section.block .wrap { padding-block: 88px; }
 .course:hover::before { transform: scaleY(1); }
 .course:hover h3, .course:hover p, .course:hover .tag, .course:hover li { color: var(--fg); }
 .course:hover li { border-color: rgba(17,18,20,.3); }
+/* Phones: the card in the middle of the screen gets the hover look while scrolling */
+.course.hot::before { transform: scaleY(1); }
+.course.hot .btn.ghost { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.course.hot h3, .course.hot p, .course.hot .tag, .course.hot li { color: var(--fg); }
+.course.hot li { border-color: rgba(17,18,20,.3); }
 .course h3, .course p, .course .tag { transition: color .3s ease; }
 .course.wide { grid-column: span 3; }
 .course .tag { font-family: var(--font-mono); font-size: .75rem; color: var(--muted); letter-spacing: .1em; direction: ltr; text-align: right; }
@@ -776,6 +781,14 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
     });
     c.addEventListener('mouseleave', function () { c.style.removeProperty('--rx'); c.style.removeProperty('--ry'); });
   });
+  // Phones: light up the course card crossing the middle of the screen
+  var mobq = matchMedia('(max-width: 760px)');
+  if ('IntersectionObserver' in window) {
+    var hio = new IntersectionObserver(function (es) {
+      es.forEach(function (en) { en.target.classList.toggle('hot', mobq.matches && en.isIntersecting); });
+    }, { rootMargin: '-42% 0px -42% 0px' });
+    document.querySelectorAll('.course').forEach(function (c) { hio.observe(c); });
+  }
   // Scroll reveal: only things below the first screen start offset, and they stay visible
   var targets = document.querySelectorAll('.course, .step, .aud > div, .cta-band .wrap, .about .txt, .about .big, form .field');
   var still = reduce || matchMedia('(max-width: 760px)').matches;
