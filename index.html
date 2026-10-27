@@ -370,7 +370,8 @@ input[type="tel"], input[type="email"] { direction: ltr; text-align: right; }
 .form-foot { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 .hp { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .contact-mail { font-weight: 700; color: var(--fg); }
-.contact-mail span { direction: ltr; unicode-bidi: isolate; user-select: all; color: var(--accent); }
+.contact-mail a { direction: ltr; unicode-bidi: isolate; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.contact-mail a:hover { text-decoration-thickness: 2px; }
 .sent { color: var(--green-ink); font-family: var(--font-mono); font-size: .9rem; }
 @media (max-width: 860px) { .contact .wrap { grid-template-columns: 1fr; gap: 32px; } }
 @media (max-width: 520px) { form { grid-template-columns: 1fr; } }
@@ -695,7 +696,7 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
         <p class="eyebrow">צור קשר</p>
         <h2>מוכנים להמראה? <mark>נרשמים כאן</mark></h2>
         <p>השאירו פרטים ונחזור אליכם עם התאמה של קורס או פעילות. לא בטוחים מה מתאים? בחרו "לא יודע / ייעוץ" ונעזור לבחור.</p>
-        <p class="contact-mail">או כתבו לנו: <span>info88academy@gmail.com</span></p>
+        <p class="contact-mail">או כתבו לנו: <a href="mailto:info88academy@gmail.com?subject=%D7%A4%D7%A0%D7%99%D7%99%D7%94%20%D7%9E%D7%94%D7%90%D7%AA%D7%A8">info88academy@gmail.com</a></p>
       </div>
       <form id="lead" novalidate>
         <div class="field"><label for="f-name">שם מלא</label><input id="f-name" name="name" required autocomplete="name"></div>
