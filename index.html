@@ -475,6 +475,25 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
   .course { will-change: auto; }
   html { scroll-behavior: auto; }
 }
+
+/* Phones: the lit course card. Mint liquid with a wavy surface pours into the card from
+   below and drains out of the previous one, sloshing as it moves; then the button turns pink.
+   Only transform, mask position and colors move. */
+@media (max-width: 760px) and (prefers-reduced-motion: no-preference) {
+  .courses .course { transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s ease !important; }
+  .courses .course::before {
+    inset: -18px 0 0; transform: translateY(calc(100% + 4px));
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 18' preserveAspectRatio='none'%3E%3Cpath d='M0 9 C20 0 40 0 60 9 S100 18 120 9 V18 H0Z'/%3E%3C/svg%3E") 0 0 / 160px 18px repeat-x, linear-gradient(#000, #000) 0 17px / 100% 100% no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 18' preserveAspectRatio='none'%3E%3Cpath d='M0 9 C20 0 40 0 60 9 S100 18 120 9 V18 H0Z'/%3E%3C/svg%3E") 0 0 / 160px 18px repeat-x, linear-gradient(#000, #000) 0 17px / 100% 100% no-repeat;
+    transition: transform .8s cubic-bezier(.45,.05,.25,1), -webkit-mask-position .8s ease-out, mask-position .8s ease-out !important;
+  }
+  .courses .course.hot::before { transform: translateY(0);
+    -webkit-mask-position: 240px 0, 0 17px; mask-position: 240px 0, 0 17px; }
+  .courses .course .btn.ghost { transition: background-color .3s ease .45s, color .3s ease .45s, border-color .3s ease .45s, transform .4s cubic-bezier(.2,.9,.3,1.5) .45s !important; }
+  .courses .course h3, .courses .course p, .courses .course .tag { transition: color .3s ease .2s !important; }
+  .courses .course.hot { --lift: -6px; box-shadow: 0 24px 40px -24px rgba(44,122,95,.6); }
+  .courses .course.hot .btn.ghost { transform: scale(1.05); }
+}
 </style>
 
 </head>
@@ -781,13 +800,24 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
     });
     c.addEventListener('mouseleave', function () { c.style.removeProperty('--rx'); c.style.removeProperty('--ry'); });
   });
-  // Phones: light up the course card crossing the middle of the screen
-  var mobq = matchMedia('(max-width: 760px)');
-  if ('IntersectionObserver' in window) {
-    var hio = new IntersectionObserver(function (es) {
-      es.forEach(function (en) { en.target.classList.toggle('hot', mobq.matches && en.isIntersecting); });
-    }, { rootMargin: '-42% 0px -42% 0px' });
-    document.querySelectorAll('.course').forEach(function (c) { hio.observe(c); });
+  // Phones: only the course card nearest the middle of the screen is lit
+  var mobq = matchMedia('(max-width: 760px)'), grid = document.querySelector('.courses');
+  var cards = [].slice.call(document.querySelectorAll('.course')), ticking = false;
+  function pickCard() {
+    ticking = false;
+    var best = null, bestD = Infinity, mid = innerHeight / 2;
+    if (mobq.matches) cards.forEach(function (c) {
+      var r = c.getBoundingClientRect();
+      if (r.bottom < innerHeight * .2 || r.top > innerHeight * .8) return;
+      var d = Math.abs(r.top + r.height / 2 - mid);
+      if (d < bestD) { bestD = d; best = c; }
+    });
+    cards.forEach(function (c) { if ((c === best) !== c.classList.contains('hot')) c.classList.toggle('hot', c === best); });
+  }
+  if (grid) {
+    addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(pickCard); } }, { passive: true });
+    addEventListener('resize', pickCard);
+    pickCard();
   }
   // Scroll reveal: only things below the first screen start offset, and they stay visible
   var targets = document.querySelectorAll('.course, .step, .aud > div, .cta-band .wrap, .about .txt, .about .big, form .field');
