@@ -146,8 +146,9 @@ nav.main a:hover::after, nav.main a.active::after { transform: scaleX(1); }
 @keyframes hover { 0%,100% { translate: 0 0; rotate: -3deg; } 50% { translate: 6px -14px; rotate: 2deg; } }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (max-width: 480px) { .drone { width: 84px; top: -26px; left: -8px; } }
-.hero h1 { font-size: clamp(3.6rem, 8.5vw, 6.6rem); }
-.hero h1 em { font-style: normal; color: var(--green-ink); }
+.hero h1 { font-size: clamp(3.2rem, 7.5vw, 6rem); }
+.lede .brand-name { color: var(--fg); font-weight: 800; unicode-bidi: isolate; }
+.hero h1 em { font-style: normal; color: var(--green-ink); white-space: nowrap; }
 .hero .lede { font-size: 1.25rem; color: var(--muted); max-width: 34ch; margin-top: 18px; }
 .hero .ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
 .hero-copy { min-width: 0; }
@@ -522,9 +523,8 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
     <span class="tile m1" aria-hidden="true"></span><span class="tile g1" aria-hidden="true"></span><span class="tile m2" aria-hidden="true"></span><span class="tile g2" aria-hidden="true"></span>
     <div class="wrap">
       <div class="hero-copy">
-        <p class="eyebrow">אקדמיה מובילה להכשרת טייסי רחפנים</p>
-        <h1>שליטה ברחפנים.<br>מהסימולטור <em>לשמיים.</em></h1>
-        <p class="lede">כשהטסת רחפנים הופכת למשחק קבוצתי. FPV, תכנות, תחרויות ו־Drone Soccer לילדים, לנוער ולארגונים.</p>
+        <h1>אקדמיה מובילה<br>להכשרת <em>טייסי רחפנים.</em></h1>
+        <p class="lede">ב־<strong class="brand-name">88ACADEMY</strong> הטסת רחפנים הופכת למשחק קבוצתי. FPV, תכנות, תחרויות ו־Drone Soccer לילדים, לנוער ולארגונים.</p>
         <div class="ctas">
           <a class="btn" href="#contact">הרשמה עכשיו</a>
           <a class="btn ghost" href="#courses">לכל הקורסים</a>
