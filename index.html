@@ -379,7 +379,6 @@ input[type="tel"], input[type="email"] { direction: ltr; text-align: right; }
 .contact-mail a { direction: ltr; unicode-bidi: isolate; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 .contact-mail a:hover { text-decoration-thickness: 2px; }
 .sent { color: var(--green-ink); font-family: var(--font-mono); font-size: .9rem; }
-.sent a { color: var(--accent); font-family: var(--font-body); font-weight: 700; text-decoration: underline; }
 @media (max-width: 860px) { .contact .wrap { grid-template-columns: 1fr; gap: 32px; } }
 @media (max-width: 520px) { form { grid-template-columns: 1fr; } }
 
@@ -811,24 +810,28 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
         <p>השאירו פרטים ונחזור אליכם עם התאמה של קורס או פעילות. לא בטוחים מה מתאים? בחרו "לא יודע / ייעוץ" ונעזור לבחור.</p>
         <p class="contact-mail">או כתבו לנו: <a href="mailto:info88academy@gmail.com?subject=%D7%A4%D7%A0%D7%99%D7%99%D7%94%20%D7%9E%D7%94%D7%90%D7%AA%D7%A8">info88academy@gmail.com</a></p>
       </div>
-      <form id="lead" novalidate>
-        <div class="field"><label for="f-name">שם מלא</label><input id="f-name" name="name" required autocomplete="name"></div>
-        <div class="field"><label for="f-phone">טלפון</label><input id="f-phone" name="phone" type="tel" required autocomplete="tel" placeholder="050-0000000"></div>
+      <form id="lead" action="https://formsubmit.co/info88academy@gmail.com" method="POST" novalidate>
+        <input type="hidden" name="_subject" id="f-subject" value="הרשמה חדשה מהאתר">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" id="f-next" value="">
+        <div class="field"><label for="f-name">שם מלא</label><input id="f-name" name="שם מלא" required autocomplete="name"></div>
+        <div class="field"><label for="f-phone">טלפון</label><input id="f-phone" name="טלפון" type="tel" required autocomplete="tel" placeholder="050-0000000"></div>
         <div class="field full"><label for="f-email">אימייל</label><input id="f-email" name="email" type="email" autocomplete="email" placeholder="name@example.com"></div>
         <div class="field">
           <label for="f-type">סוג פנייה</label>
-          <select id="f-type" name="type">
+          <select id="f-type" name="סוג פנייה">
             <option>פרטי</option><option>מוסד</option><option>ארגון</option><option>בית ספר</option>
           </select>
         </div>
         <div class="field">
           <label for="f-course">קורס מבוקש</label>
-          <select id="f-course" name="course">
+          <select id="f-course" name="קורס מבוקש">
             <option>FPV</option><option>FPV היברידי</option><option>הכנה למבחן העטלף</option><option>שליטה ותכנות</option><option>Drone Soccer</option><option>לא יודע / ייעוץ</option>
           </select>
         </div>
         <div class="hp" aria-hidden="true"><label for="f-hp">אל תמלאו שדה זה</label><input id="f-hp" name="_honey" tabindex="-1" autocomplete="off"></div>
-        <div class="field full"><label for="f-msg">הודעה <small>(לא חובה)</small></label><textarea id="f-msg" name="msg"></textarea></div>
+        <div class="field full"><label for="f-msg">הודעה <small>(לא חובה)</small></label><textarea id="f-msg" name="הודעה"></textarea></div>
         <div class="form-foot">
           <button class="btn" type="submit">שלחו ונחזור אליכם</button>
           <span class="sent" id="sent" role="status" hidden></span>
@@ -1087,8 +1090,13 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
   mnav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
   addEventListener('keydown', function (e) { if (e.key === 'Escape' && !mnav.hidden) { setMenu(false); burger.focus(); } });
   document.addEventListener('click', function (e) { if (!mnav.hidden && !e.target.closest('header.top')) setMenu(false); });
-  var LEAD_INBOX = 'info88academy@gmail.com';
   var form = document.getElementById('lead'), sent = document.getElementById('sent');
+  if (/[?&]sent=1/.test(location.search)) {
+    sent.textContent = 'תודה! קיבלנו את הפרטים ונחזור אליכם בהקדם.'; sent.hidden = false;
+    history.replaceState(null, '', location.pathname + '#contact');
+  }
+  // Coming back with the browser's Back button: let them send again
+  addEventListener('pageshow', function () { form.querySelector('button[type="submit"]').disabled = false; if (sent.textContent === 'שולח...') sent.hidden = true; });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var name = document.getElementById('f-name'), phone = document.getElementById('f-phone');
@@ -1098,41 +1106,14 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
       (name.value.trim() ? phone : name).focus();
       return;
     }
-    // Sends the sign-up to the academy inbox through FormSubmit (first ever submission asks the inbox owner to confirm once)
-    var btn = form.querySelector('button[type="submit"]');
-    var data = {
-      _subject: 'הרשמה חדשה מהאתר: ' + document.getElementById('f-course').value + ' (' + name.value.trim() + ')',
-      _template: 'table', _captcha: 'false',
-      'שם מלא': name.value.trim(), 'טלפון': phone.value.trim(),
-      'אימייל': document.getElementById('f-email').value.trim(),
-      'סוג פנייה': document.getElementById('f-type').value,
-      'קורס מבוקש': document.getElementById('f-course').value,
-      'הודעה': document.getElementById('f-msg').value.trim(),
-      _honey: document.getElementById('f-hp').value
-    };
-    var mail = document.getElementById('f-email').value.trim();
-    if (mail) data._replyto = mail;
-    btn.disabled = true; sent.textContent = 'שולח...'; sent.hidden = false;
-    fetch('https://formsubmit.co/ajax/' + LEAD_INBOX, {
-      method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data)
-    }).then(function (res) { return res.json().then(function (j) { if (!res.ok || String(j.success) !== 'true') throw new Error(j.message || res.status); }); })
-      .then(function () { form.reset(); sent.textContent = 'תודה! קיבלנו את הפרטים ונחזור אליכם בהקדם.'; })
-      .catch(function (err) {
-        // FormSubmit failed (most often: the inbox has not clicked "Activate Form" yet).
-        // Don't lose the lead: open a ready-made email with the same details instead.
-        if (window.console) console.warn('FormSubmit:', err && err.message);
-        var lines = ['שם מלא', 'טלפון', 'אימייל', 'סוג פנייה', 'קורס מבוקש', 'הודעה']
-          .filter(function (k) { return data[k]; })
-          .map(function (k) { return k + ': ' + data[k]; });
-        var href = 'mailto:' + LEAD_INBOX + '?subject=' + encodeURIComponent(data._subject) + '&body=' + encodeURIComponent(lines.join('\n'));
-        sent.innerHTML = '';
-        sent.appendChild(document.createTextNode('לא הצלחנו לשלוח אוטומטית. '));
-        var a = document.createElement('a');
-        a.href = href; a.textContent = 'לחצו כאן לשליחה במייל';
-        sent.appendChild(a);
-        location.href = href;
-      })
-      .then(function () { btn.disabled = false; });
+    // Plain form POST to FormSubmit (most reliable). It emails the academy inbox and then
+    // sends the visitor back here with ?sent=1. The very first submission ever asks the
+    // inbox owner to click "Activate Form" once.
+    document.getElementById('f-subject').value = 'הרשמה חדשה מהאתר: ' + document.getElementById('f-course').value + ' (' + name.value.trim() + ')';
+    document.getElementById('f-next').value = location.origin + location.pathname + '?sent=1#contact';
+    form.querySelector('button[type="submit"]').disabled = true;
+    sent.textContent = 'שולח...'; sent.hidden = false;
+    form.submit();
   });
 })();
 </script>
