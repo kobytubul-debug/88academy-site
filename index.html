@@ -379,6 +379,7 @@ input[type="tel"], input[type="email"] { direction: ltr; text-align: right; }
 .contact-mail a { direction: ltr; unicode-bidi: isolate; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 .contact-mail a:hover { text-decoration-thickness: 2px; }
 .sent { color: var(--green-ink); font-family: var(--font-mono); font-size: .9rem; }
+.sent a { color: var(--accent); font-family: var(--font-body); font-weight: 700; text-decoration: underline; }
 @media (max-width: 860px) { .contact .wrap { grid-template-columns: 1fr; gap: 32px; } }
 @media (max-width: 520px) { form { grid-template-columns: 1fr; } }
 
@@ -1116,7 +1117,21 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
       method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data)
     }).then(function (res) { return res.json().then(function (j) { if (!res.ok || String(j.success) !== 'true') throw new Error(j.message || res.status); }); })
       .then(function () { form.reset(); sent.textContent = 'תודה! קיבלנו את הפרטים ונחזור אליכם בהקדם.'; })
-      .catch(function () { sent.textContent = 'השליחה לא הצליחה. אפשר לכתוב לנו ישירות: ' + LEAD_INBOX; })
+      .catch(function (err) {
+        // FormSubmit failed (most often: the inbox has not clicked "Activate Form" yet).
+        // Don't lose the lead: open a ready-made email with the same details instead.
+        if (window.console) console.warn('FormSubmit:', err && err.message);
+        var lines = ['שם מלא', 'טלפון', 'אימייל', 'סוג פנייה', 'קורס מבוקש', 'הודעה']
+          .filter(function (k) { return data[k]; })
+          .map(function (k) { return k + ': ' + data[k]; });
+        var href = 'mailto:' + LEAD_INBOX + '?subject=' + encodeURIComponent(data._subject) + '&body=' + encodeURIComponent(lines.join('\n'));
+        sent.innerHTML = '';
+        sent.appendChild(document.createTextNode('לא הצלחנו לשלוח אוטומטית. '));
+        var a = document.createElement('a');
+        a.href = href; a.textContent = 'לחצו כאן לשליחה במייל';
+        sent.appendChild(a);
+        location.href = href;
+      })
       .then(function () { btn.disabled = false; });
   });
 })();
