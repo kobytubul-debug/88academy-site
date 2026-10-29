@@ -235,6 +235,20 @@ section.block .wrap { padding-block: 88px; }
 .course.hot li { border-color: rgba(17,18,20,.3); }
 .course h3, .course p, .course .tag { transition: color .3s ease; }
 .course.wide { grid-column: span 3; }
+.course-img { position: relative; margin: -26px -26px 6px; height: 230px; overflow: clip; border-radius: 8px 8px 0 0; background: var(--fg); }
+@media (max-width: 620px) { .course-img { height: auto; aspect-ratio: 16 / 9; } }
+/* One look for every course photo: the same grade, a soft brand tint and FPV-style corner marks */
+.course-img::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(#fff, #fff) top 12px right 12px / 18px 2px no-repeat, linear-gradient(#fff, #fff) top 12px right 12px / 2px 18px no-repeat,
+    linear-gradient(#fff, #fff) top 12px left 12px / 18px 2px no-repeat, linear-gradient(#fff, #fff) top 12px left 12px / 2px 18px no-repeat,
+    linear-gradient(#fff, #fff) bottom 12px right 12px / 18px 2px no-repeat, linear-gradient(#fff, #fff) bottom 12px right 12px / 2px 18px no-repeat,
+    linear-gradient(#fff, #fff) bottom 12px left 12px / 18px 2px no-repeat, linear-gradient(#fff, #fff) bottom 12px left 12px / 2px 18px no-repeat,
+    linear-gradient(to top, rgba(17,18,20,.42), transparent 50%),
+    linear-gradient(rgba(44,122,95,.16), rgba(44,122,95,.16)); }
+.course-img img { display: block; width: 100%; height: 100%; object-fit: cover; filter: saturate(.8) contrast(1.08) brightness(.96); transition: transform .6s cubic-bezier(.2,.7,.2,1), filter .6s ease; }
+.course:hover .course-img img, .course.hot .course-img img { filter: saturate(1) contrast(1.05) brightness(1); }
+.course:hover .course-img img, .course.hot .course-img img { transform: scale(1.06); }
 .course .tag { font-family: var(--font-mono); font-size: .75rem; color: var(--muted); letter-spacing: .1em; direction: ltr; text-align: right; }
 .course h3 { font-size: 2.3rem; }
 .course p { color: var(--muted); }
@@ -660,6 +674,7 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
       </div>
       <div class="courses">
         <article class="course wide">
+          <figure class="course-img"><img src="img/course-fpv.jpg" alt="רחפן FPV מרוץ בטיסה" width="1200" height="600" loading="lazy"></figure>
           <span class="tag">FPV · FIRST PERSON VIEW</span>
           <h3>קורס FPV</h3>
           <p>טסים דרך העיניים של הרחפן. לומדים לשלוט במצב ACRO, לעבור שערים ולבצע מסלולים מהירים עם משקפי FPV.</p>
@@ -667,6 +682,7 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
           <a class="btn ghost reg" href="#contact" data-course="FPV">להרשמה לקורס</a>
         </article>
         <article class="course wide">
+          <figure class="course-img"><img src="img/course-hybrid.jpg" alt="רחפן FPV קטן במסלול שערים מואר" width="1200" height="600" loading="lazy"></figure>
           <span class="tag">HYBRID FPV</span>
           <h3>FPV היברידי</h3>
           <p>שילוב של מפגשים פרונטליים בשטח ותרגול סימולטור מהבית. מתקדמים בקצב אישי ומגיעים לשטח מוכנים.</p>
@@ -674,6 +690,7 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
           <a class="btn ghost reg" href="#contact" data-course="FPV היברידי">להרשמה לקורס</a>
         </article>
         <article class="course">
+          <figure class="course-img"><img src="img/course-bat.jpg" alt="תרגול בסימולטור טיסה עם שלט ורחפן FPV" width="608" height="342" loading="lazy"></figure>
           <span class="tag">BAT TEST PREP</span>
           <h3>הכנה למבחן העטלף</h3>
           <p>הכנה ממוקדת למבחן: תרגול מיומנויות הטסה, סימולציות של תנאי המבחן ומשוב אישי.</p>
@@ -681,6 +698,7 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
           <a class="btn ghost reg" href="#contact" data-course="הכנה למבחן העטלף">להרשמה לקורס</a>
         </article>
         <article class="course">
+          <figure class="course-img"><img src="img/course-code.jpg" alt="רחפן מתוכנת מרחף באולם מול תלמידים" width="960" height="540" loading="lazy"></figure>
           <span class="tag">CONTROL &amp; CODE</span>
           <h3>שליטה ותכנות רחפנים</h3>
           <p>מהטסה ידנית ועד כתיבת קוד שמטיס את הרחפן לבד. חשיבה הנדסית דרך משימות טיסה.</p>
@@ -688,6 +706,7 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
           <a class="btn ghost reg" href="#contact" data-course="שליטה ותכנות">להרשמה לקורס</a>
         </article>
         <article class="course">
+          <figure class="course-img"><img src="img/course-soccer.jpg" alt="שני רחפני Drone Soccer בכדורי כלוב מול השער" width="960" height="540" loading="lazy"></figure>
           <span class="tag">DRONE SOCCER</span>
           <h3>Drone Soccer</h3>
           <p>כדורגל של רחפנים בכלוב. קבוצות של חמישה, שער אחד בכל צד, ועבודת צוות אמיתית באוויר.</p>
