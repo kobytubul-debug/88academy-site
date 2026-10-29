@@ -321,6 +321,14 @@ section.block .wrap { padding-block: 88px; }
 .flight.dragging, .flight.dragging .quad { cursor: grabbing; }
 .flight .quad:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .flight .quad .p svg { animation-duration: 3s; }
+/* Phones: the slider stands upright on the right edge and the logo rides down as you scroll */
+.flight.vert { position: fixed; inset: calc(env(safe-area-inset-top, 0px) + 104px) 4px calc(env(safe-area-inset-bottom, 0px) + 92px) auto; width: 26px; height: auto; z-index: 4; pointer-events: none; }
+.flight.vert .trail { inset: 0 auto auto 50%; translate: -50% 0; width: 10px; height: calc(var(--p, 0) * 100%);
+  background: linear-gradient(to bottom, var(--green) 0%, var(--mint) 30%, #e79ab0 70%, var(--accent) 100%) top / 100% calc(100% / max(var(--p, 0), .001)) no-repeat;
+  clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%);
+  -webkit-mask: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.35) 40%, #000 92%); mask: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.35) 40%, #000 92%); }
+.flight.vert .quad { top: calc(var(--p, 0) * 100%); right: auto; left: 50%; width: 26px; translate: -50% -50%; pointer-events: auto; }
+body:has(.mnav:not([hidden])) .flight.vert { display: none; }
 
 /* Quiz */
 .quiz { background: var(--surface); position: relative; overflow: clip; }
@@ -1022,24 +1030,25 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
     knob.setAttribute('aria-valuenow', Math.round(p * 100));
   }
   var knob = flight.querySelector('.quad');
-  // On phones the slider sits in the bottom bar, above the sign-up button
+  // On phones the slider stands upright on the right edge of the screen
   var mq = matchMedia('(max-width: 760px)'), mobBar = document.querySelector('.mob-cta'), topBar = document.querySelector('header.top');
-  function placeSlider() { if (mq.matches) mobBar.insertBefore(flight, mobBar.firstChild); else topBar.appendChild(flight); }
+  function placeSlider() { flight.classList.toggle('vert', mq.matches); if (mq.matches) document.body.appendChild(flight); else topBar.appendChild(flight); }
   placeSlider();
   if (mq.addEventListener) mq.addEventListener('change', placeSlider); else if (mq.addListener) mq.addListener(placeSlider);
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
-  // Drag the logo (or tap anywhere on the trail) to move through the page. The bar fills from the right.
-  function scrubTo(clientX) {
-    var b = flight.getBoundingClientRect(), p = Math.min(1, Math.max(0, (b.right - clientX) / b.width));
+  // Drag the logo (or, on desktop, tap anywhere on the trail) to move through the page
+  function scrubTo(e) {
+    var b = flight.getBoundingClientRect(), vert = flight.classList.contains('vert');
+    var p = Math.min(1, Math.max(0, vert ? (e.clientY - b.top) / b.height : (b.right - e.clientX) / b.width));
     window.scrollTo({ top: p * (root.scrollHeight - innerHeight), behavior: 'instant' });
   }
   flight.addEventListener('pointerdown', function (e) {
     if (e.button > 0) return;
     e.preventDefault(); flight.classList.add('dragging');
     try { flight.setPointerCapture(e.pointerId); } catch (_) {}
-    scrubTo(e.clientX);
+    scrubTo(e);
   });
-  flight.addEventListener('pointermove', function (e) { if (flight.classList.contains('dragging')) scrubTo(e.clientX); });
+  flight.addEventListener('pointermove', function (e) { if (flight.classList.contains('dragging')) scrubTo(e); });
   function endDrag() { flight.classList.remove('dragging'); }
   flight.addEventListener('pointerup', endDrag); flight.addEventListener('pointercancel', endDrag); flight.addEventListener('lostpointercapture', endDrag);
   knob.addEventListener('keydown', function (e) {
