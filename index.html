@@ -810,28 +810,24 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
         <p>השאירו פרטים ונחזור אליכם עם התאמה של קורס או פעילות. לא בטוחים מה מתאים? בחרו "לא יודע / ייעוץ" ונעזור לבחור.</p>
         <p class="contact-mail">או כתבו לנו: <a href="mailto:info88academy@gmail.com?subject=%D7%A4%D7%A0%D7%99%D7%99%D7%94%20%D7%9E%D7%94%D7%90%D7%AA%D7%A8">info88academy@gmail.com</a></p>
       </div>
-      <form id="lead" action="https://formsubmit.co/info88academy@gmail.com" method="POST" novalidate>
-        <input type="hidden" name="_subject" id="f-subject" value="הרשמה חדשה מהאתר">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" id="f-next" value="">
-        <div class="field"><label for="f-name">שם מלא</label><input id="f-name" name="שם מלא" required autocomplete="name"></div>
-        <div class="field"><label for="f-phone">טלפון</label><input id="f-phone" name="טלפון" type="tel" required autocomplete="tel" placeholder="050-0000000"></div>
+      <form id="lead" novalidate>
+        <div class="field"><label for="f-name">שם מלא</label><input id="f-name" name="name" required autocomplete="name"></div>
+        <div class="field"><label for="f-phone">טלפון</label><input id="f-phone" name="phone" type="tel" required autocomplete="tel" placeholder="050-0000000"></div>
         <div class="field full"><label for="f-email">אימייל</label><input id="f-email" name="email" type="email" autocomplete="email" placeholder="name@example.com"></div>
         <div class="field">
           <label for="f-type">סוג פנייה</label>
-          <select id="f-type" name="סוג פנייה">
+          <select id="f-type" name="type">
             <option>פרטי</option><option>מוסד</option><option>ארגון</option><option>בית ספר</option>
           </select>
         </div>
         <div class="field">
           <label for="f-course">קורס מבוקש</label>
-          <select id="f-course" name="קורס מבוקש">
+          <select id="f-course" name="course">
             <option>FPV</option><option>FPV היברידי</option><option>הכנה למבחן העטלף</option><option>שליטה ותכנות</option><option>Drone Soccer</option><option>לא יודע / ייעוץ</option>
           </select>
         </div>
-        <div class="hp" aria-hidden="true"><label for="f-hp">אל תמלאו שדה זה</label><input id="f-hp" name="_honey" tabindex="-1" autocomplete="off"></div>
-        <div class="field full"><label for="f-msg">הודעה <small>(לא חובה)</small></label><textarea id="f-msg" name="הודעה"></textarea></div>
+        <div class="hp" aria-hidden="true"><label for="f-hp">אל תמלאו שדה זה</label><input id="f-hp" name="botcheck" tabindex="-1" autocomplete="off"></div>
+        <div class="field full"><label for="f-msg">הודעה <small>(לא חובה)</small></label><textarea id="f-msg" name="msg"></textarea></div>
         <div class="form-foot">
           <button class="btn" type="submit">שלחו ונחזור אליכם</button>
           <span class="sent" id="sent" role="status" hidden></span>
@@ -1090,13 +1086,9 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
   mnav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
   addEventListener('keydown', function (e) { if (e.key === 'Escape' && !mnav.hidden) { setMenu(false); burger.focus(); } });
   document.addEventListener('click', function (e) { if (!mnav.hidden && !e.target.closest('header.top')) setMenu(false); });
+  // Web3Forms access key for Info88academy@gmail.com (from web3forms.com; safe to be public)
+  var WEB3FORMS_KEY = 'bbbcaf87-a765-44d5-842a-ab422a24b320';
   var form = document.getElementById('lead'), sent = document.getElementById('sent');
-  if (/[?&]sent=1/.test(location.search)) {
-    sent.textContent = 'תודה! קיבלנו את הפרטים ונחזור אליכם בהקדם.'; sent.hidden = false;
-    history.replaceState(null, '', location.pathname + '#contact');
-  }
-  // Coming back with the browser's Back button: let them send again
-  addEventListener('pageshow', function () { form.querySelector('button[type="submit"]').disabled = false; if (sent.textContent === 'שולח...') sent.hidden = true; });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var name = document.getElementById('f-name'), phone = document.getElementById('f-phone');
@@ -1106,14 +1098,33 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
       (name.value.trim() ? phone : name).focus();
       return;
     }
-    // Plain form POST to FormSubmit (most reliable). It emails the academy inbox and then
-    // sends the visitor back here with ?sent=1. The very first submission ever asks the
-    // inbox owner to click "Activate Form" once.
-    document.getElementById('f-subject').value = 'הרשמה חדשה מהאתר: ' + document.getElementById('f-course').value + ' (' + name.value.trim() + ')';
-    document.getElementById('f-next').value = location.origin + location.pathname + '?sent=1#contact';
-    form.querySelector('button[type="submit"]').disabled = true;
-    sent.textContent = 'שולח...'; sent.hidden = false;
-    form.submit();
+    // Sends the sign-up to the academy inbox (Info88academy@gmail.com) through Web3Forms
+    if (document.getElementById('f-hp').value) return; // bot filled the hidden field
+    var btn = form.querySelector('button[type="submit"]');
+    var data = {
+      access_key: WEB3FORMS_KEY,
+      subject: 'הרשמה חדשה מהאתר: ' + document.getElementById('f-course').value + ' (' + name.value.trim() + ')',
+      from_name: '88ACADEMY אתר',
+      'שם מלא': name.value.trim(), 'טלפון': phone.value.trim(),
+      'אימייל': document.getElementById('f-email').value.trim(),
+      'סוג פנייה': document.getElementById('f-type').value,
+      'קורס מבוקש': document.getElementById('f-course').value,
+      'הודעה': document.getElementById('f-msg').value.trim()
+    };
+    if (data['אימייל']) data.replyto = data['אימייל'];
+    btn.disabled = true; sent.textContent = 'שולח...'; sent.hidden = false;
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data)
+    }).then(function (res) { return res.json(); })
+      .then(function (j) {
+        if (!j.success) throw new Error(j.message);
+        form.reset(); sent.textContent = 'תודה! קיבלנו את הפרטים ונחזור אליכם בהקדם.';
+      })
+      .catch(function (err) {
+        if (window.console) console.warn('Web3Forms:', err && err.message);
+        sent.textContent = 'השליחה לא הצליחה. נסו שוב בעוד רגע.';
+      })
+      .then(function () { btn.disabled = false; });
   });
 })();
 </script>
