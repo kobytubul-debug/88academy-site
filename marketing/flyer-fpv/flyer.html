@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>88ACADEMY · פלייר קורס FPV</title>
+<!-- פתחו flyer.html?format=square (1080x1080) או flyer.html?format=story (1080x1920) -->
+<link href="https://fonts.googleapis.com/css2?family=Karantina:wght@400;700&family=Assistant:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #c84b6a;
+    --mint: #78e1bb;
+    --green: #59aa8e;
+    --osd: #bfe7ff;
+    --ink: #0b0c0e;
+    --fg: #ffffff;
+    --muted: rgba(255,255,255,.72);
+    --font-body: "Assistant", "Arial Hebrew", Arial, sans-serif;
+    --font-display: "Karantina", "Assistant", "Arial Hebrew", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ink); }
+  body { font-family: var(--font-body); color: var(--fg); }
+
+  .flyer {
+    position: relative; overflow: hidden;
+    width: 1080px; height: 1080px;
+    background: var(--ink);
+    display: flex; flex-direction: column;
+    padding: 64px 72px 60px;
+  }
+  .story .flyer { height: 1920px; padding: 110px 80px 130px; }
+  .story .spacer { min-height: 70px; }
+
+  /* photo + shading */
+  .photo {
+    position: absolute; inset: 0;
+    background: url("drone.jpg") 30% 40% / cover no-repeat;
+    filter: saturate(1.1);
+  }
+  .square .photo { background-position: 22% 50%; background-size: auto 100%; background-color: #1d2a1a; }
+  .story .photo { inset: 0 0 auto 0; height: 1120px; background-position: 28% 50%; background-size: auto 100%; }
+  .shade {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(11,12,14,.6) 0%, rgba(11,12,14,.1) 18%, rgba(11,12,14,.45) 34%, rgba(11,12,14,.9) 56%, var(--ink) 72%),
+      linear-gradient(90deg, rgba(11,12,14,.2), rgba(11,12,14,.0) 50%, rgba(11,12,14,.55));
+  }
+  .story .shade {
+    background:
+      linear-gradient(180deg, rgba(11,12,14,.6) 0%, rgba(11,12,14,.0) 14%, rgba(11,12,14,.1) 36%, rgba(11,12,14,.9) 52%, var(--ink) 60%);
+  }
+
+  /* FPV OSD overlay, echoing the site hero */
+  .osd { position: absolute; inset: 0; pointer-events: none; font-family: var(--font-mono); color: var(--osd); }
+  .osd .corner { position: absolute; width: 46px; height: 46px; border: 3px solid rgba(191,231,255,.55); }
+  .osd .tl { top: 28px; left: 28px; border-right: 0; border-bottom: 0; }
+  .osd .tr { top: 28px; right: 28px; border-left: 0; border-bottom: 0; }
+  .osd .bl { bottom: 28px; left: 28px; border-right: 0; border-top: 0; }
+  .osd .br { bottom: 28px; right: 28px; border-left: 0; border-top: 0; }
+  .osd .rec { position: absolute; top: 64px; left: 72px; font-size: 22px; letter-spacing: .08em; display: flex; gap: 18px; direction: ltr; }
+  .story .osd .rec { top: 110px; left: 80px; }
+  .osd .rec b { color: #ff5a6e; font-weight: 600; }
+  .osd .readout { position: absolute; left: 72px; font-size: 19px; line-height: 1.7; direction: ltr; text-align: left; opacity: .85; }
+  .square .osd .readout { top: 118px; }
+  .story .osd .readout { top: 168px; }
+  .osd .cross {
+    position: absolute; width: 64px; height: 64px; transform: translate(-50%, -50%);
+    border: 2px solid rgba(191,231,255,.5); border-radius: 50%;
+  }
+  .osd .cross::before, .osd .cross::after { content: ""; position: absolute; background: rgba(191,231,255,.6); }
+  .osd .cross::before { left: 50%; top: -16px; bottom: -16px; width: 2px; transform: translateX(-50%); }
+  .osd .cross::after { top: 50%; left: -16px; right: -16px; height: 2px; transform: translateY(-50%); }
+  .square .osd .cross { left: 300px; top: 300px; }
+  .story .osd .cross { left: 300px; top: 340px; }
+
+  /* content */
+  .content { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .logo { width: 104px; filter: invert(1); display: block; }
+  .story .logo { width: 140px; }
+
+  .spacer { flex: 1; }
+
+  .kicker {
+    align-self: flex-start;
+    background: var(--accent); color: #fff;
+    font-weight: 800; font-size: 34px; line-height: 1;
+    padding: 12px 26px 14px; border-radius: 999px;
+    box-shadow: 0 8px 30px rgba(200,75,106,.45);
+  }
+  .headline {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 132px; line-height: .86; margin-top: 18px; letter-spacing: .005em;
+  }
+  .headline em { font-style: normal; color: var(--mint); }
+  .story .headline { font-size: 176px; margin-top: 28px; }
+  .course {
+    margin-top: 16px; display: flex; align-items: center; gap: 16px;
+    font-size: 40px; font-weight: 700;
+  }
+  .course .tag {
+    font-weight: 800; font-size: 28px; line-height: 1;
+    color: var(--ink); background: var(--mint); padding: 8px 16px 10px; border-radius: 8px;
+  }
+  .story .course { font-size: 52px; margin-top: 26px; }
+  .story .course .tag { font-size: 38px; }
+
+  /* 3 meetings as flight waypoints */
+  .route { margin-top: 30px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; position: relative; }
+  .story .route { grid-template-columns: 1fr; gap: 16px; margin-top: 44px; }
+  .wp {
+    position: relative;
+    background: rgba(255,255,255,.06);
+    border: 1.5px solid rgba(255,255,255,.14);
+    border-radius: 18px; padding: 18px 20px 18px;
+  }
+  .wp .num { font-family: var(--font-mono); font-size: 18px; color: var(--mint); letter-spacing: .1em; direction: ltr; display: inline-block; }
+  .wp h3 { font-size: 34px; font-weight: 800; line-height: 1.05; margin-top: 6px; }
+  .wp p { font-size: 19px; color: var(--muted); line-height: 1.3; margin-top: 6px; }
+  .story .wp { display: grid; grid-template-columns: 108px 1fr; align-items: center; padding: 24px 28px; column-gap: 18px; }
+  .story .wp .num {
+    grid-row: span 2; width: 96px; height: 96px; border-radius: 50%;
+    border: 2px solid var(--mint); display: grid; place-items: center; font-size: 22px;
+  }
+  .story .wp h3 { font-size: 46px; margin-top: 0; }
+  .story .wp p { font-size: 26px; margin-top: 4px; }
+
+  .feature {
+    margin-top: 18px; display: flex; align-items: center; gap: 18px;
+    border-right: 5px solid var(--mint); padding: 6px 18px 6px 0;
+  }
+  .feature svg { flex: none; width: 48px; height: 48px; }
+  .feature .t { font-size: 26px; font-weight: 700; line-height: 1.2; }
+  .feature .t span { display: block; font-weight: 400; color: var(--muted); font-size: 22px; }
+  .story .feature { margin-top: 40px; gap: 24px; padding-right: 26px; }
+  .story .feature svg { width: 72px; height: 72px; }
+  .story .feature .t { font-size: 38px; }
+  .story .feature .t span { font-size: 32px; margin-top: 4px; }
+
+  .cta-row { margin-top: 26px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .story .cta-row { flex-direction: column; align-items: stretch; margin-top: 52px; gap: 30px; }
+  .cta {
+    background: var(--accent); color: #fff; font-weight: 800; font-size: 36px; line-height: 1;
+    padding: 22px 34px 24px; border-radius: 16px; display: inline-flex; align-items: center; gap: 16px;
+    box-shadow: 0 10px 36px rgba(200,75,106,.4);
+    white-space: nowrap;
+  }
+  .cta svg { width: 30px; height: 30px; transform: scaleX(-1); }
+  .story .cta { font-size: 54px; padding: 34px 40px 36px; justify-content: center; border-radius: 22px; }
+  .story .cta svg { width: 44px; height: 44px; }
+  .contacts { font-size: 22px; line-height: 1.5; text-align: left; color: var(--muted); }
+  .contacts b { color: #fff; font-weight: 700; }
+  .contacts .ltr { direction: ltr; unicode-bidi: isolate; }
+  .story .contacts { text-align: center; font-size: 32px; }
+</style>
+</head>
+<body>
+<div class="flyer">
+  <div class="photo"></div>
+  <div class="shade"></div>
+  <div class="osd" aria-hidden="true">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div class="rec"><b>● REC</b><span>MODE ACRO</span><span>CH 5.8GHz</span></div>
+    <div class="readout">ALT 012m<br>SPD 48km/h<br>BAT 16.4V</div>
+    <div class="cross"></div>
+  </div>
+
+  <div class="content">
+    <div class="top">
+      <img class="logo" src="logo.png" alt="88ACADEMY">
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="kicker">הנה זה קורה!</div>
+    <h1 class="headline">כשהדרכה <em>ורחפנים</em><br>נפגשים</h1>
+    <div class="course"><span>קורס רחפני FPV</span><span class="tag">3 מפגשים</span></div>
+
+    <div class="route">
+      <div class="wp"><span class="num">WP1</span><h3>היכרות</h3><p>מכירים את הרחפן, השלט וכללי הבטיחות</p></div>
+      <div class="wp"><span class="num">WP2</span><h3>הטסה</h3><p>טיסות אמיתיות בשטח עם משוב מהמדריך</p></div>
+      <div class="wp"><span class="num">WP3</span><h3>סיום הקורס</h3><p>אתגר סיום ורואים כמה התקדמתם</p></div>
+    </div>
+
+    <div class="feature">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#78e1bb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="5" y="8" width="38" height="26" rx="4"/><path d="M17 40h14M24 34v6"/><path d="M12 26l7-7 6 5 10-10"/>
+      </svg>
+      <div class="t">בקרה מלאה על התקדמות הלומד במערכת מתקדמת<span>לומדים בזמן שלכם, בקצב שלכם</span></div>
+    </div>
+
+    <div class="cta-row">
+      <div class="cta">השאירו פרטים ונעוף יחד
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+      <div class="contacts">
+        <div>אינסטגרם <b class="ltr">@_88academy_</b></div>
+        <div><b class="ltr">info88academy@gmail.com</b></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var f = new URLSearchParams(location.search).get("format");
+  document.documentElement.className = f === "story" ? "story" : "square";
+</script>
+</body>
+</html>
