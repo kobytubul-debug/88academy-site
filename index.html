@@ -258,6 +258,32 @@ section.block .wrap { padding-block: 88px; }
 @media (max-width: 900px) { .course, .course.wide { grid-column: span 3; } }
 @media (max-width: 620px) { .courses { grid-template-columns: 1fr; } .course, .course.wide { grid-column: auto; } }
 
+/* Next courses: upcoming course dates with a flyer and ticket links */
+.next { margin-top: 40px; background: var(--surface); border: 6px solid var(--green); border-radius: 14px; padding: 30px; display: grid; gap: 22px; }
+.next > h3 { font-size: clamp(2.4rem, 5vw, 3.2rem); line-height: 1; }
+.next > h3 mark { background: linear-gradient(transparent 62%, var(--mint) 62%); color: inherit; padding-inline: 4px; }
+.next-card { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: grid; grid-template-columns: minmax(0, 340px) 1fr; gap: 28px; align-items: center; box-shadow: 0 20px 40px -30px rgba(44,122,95,.6); }
+.next-flyer { display: block; border-radius: 10px; overflow: clip; border: 1px solid var(--line); background: var(--surface); }
+.next-flyer img { display: block; width: 100%; height: auto; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.next-flyer:hover img { transform: scale(1.03); }
+.next-info { display: grid; gap: 16px; align-content: center; justify-items: stretch; }
+.next-info > * { margin: 0; }
+.next-info .where { justify-self: start; }
+.next-info .where { display: inline-flex; align-items: center; gap: 8px; width: fit-content; font-weight: 700; font-size: 1.05rem; color: var(--green-ink); background: rgba(120,225,187,.28); border-radius: 99px; padding: 5px 16px; }
+.next-info .where svg { width: 18px; height: 18px; flex: none; }
+.next-info h4 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 4vw, 2.6rem); line-height: 1.05; }
+.next-info .when { font-size: 1.15rem; color: var(--fg); }
+.next-info .when strong { background: linear-gradient(transparent 60%, var(--mint) 60%); padding-inline: 3px; }
+.next-btns { display: grid; gap: 10px; }
+.next-btns .btn { justify-content: space-between; font-size: 1.08rem; padding: 14px 20px; border-radius: 8px; }
+.next-btns .btn span[aria-hidden] { font-size: 1.2rem; line-height: 1; }
+.next-note { font-size: .92rem; color: var(--muted); }
+@media (max-width: 760px) {
+  .next { padding: 20px 16px; margin-top: 28px; }
+  .next-card { grid-template-columns: 1fr; padding: 16px; gap: 20px; }
+  .next-flyer { max-width: 420px; justify-self: center; }
+}
+
 /* Flight path (real sequence) */
 .path { background: var(--surface); border-block: 1px solid var(--line); }
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; counter-reset: step; position: relative; }
@@ -720,6 +746,23 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
           <p>כדורגל של רחפנים בכלוב. קבוצות של חמישה, שער אחד בכל צד, ועבודת צוות אמיתית באוויר.</p>
           <ul><li>משחק קבוצתי</li><li>ליגות ותחרויות</li></ul>
           <a class="btn ghost reg" href="#contact" data-course="Drone Soccer">להרשמה לקורס</a>
+        </article>
+      </div>
+      <div class="next" id="next-courses">
+        <h3>הקורסים <mark>הבאים</mark> שלנו</h3>
+        <article class="next-card">
+          <a class="next-flyer" href="img/next-courses-flyer.jpg" target="_blank" rel="noopener" aria-label="פתיחת הפלייר בגודל מלא"><img src="img/next-courses-flyer.jpg" alt="פלייר: קורסים טכנולוגיים במייקרס בית קשת. קורס תכנות והטסת רחפנים, קורס מידול והדפסה בתלת־ממד וקורס FPV. תחילת הקורסים 16–17/12/26" width="1199" height="1312" loading="lazy"></a>
+          <div class="next-info">
+            <span class="where"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>בית קשת - מייקרס</span>
+            <h4>קורסים טכנולוגיים במייקרס</h4>
+            <p class="when">הקורסים נפתחים ב־<strong><span dir="ltr">16–17</span> בדצמבר</strong>, בקבוצות קטנות ובליווי מקצועי.</p>
+            <div class="next-btns">
+              <a class="btn" href="https://glt.smarticket.co.il/show/997" target="_blank" rel="noopener">קורס תלת מימד <span aria-hidden="true">←</span></a>
+              <a class="btn" href="https://glt.smarticket.co.il/show/998" target="_blank" rel="noopener">קורס הטסה ותכנות רחפנים <span aria-hidden="true">←</span></a>
+              <a class="btn" href="https://glt.smarticket.co.il/show/999" target="_blank" rel="noopener">קורס FPV <span aria-hidden="true">←</span></a>
+            </div>
+            <p class="next-note">ההרשמה נפתחת באתר הכרטיסים בחלון חדש.</p>
+          </div>
         </article>
       </div>
     </div>
