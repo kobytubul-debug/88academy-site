@@ -284,6 +284,33 @@ section.block .wrap { padding-block: 88px; }
   .next-flyer { max-width: 420px; justify-self: center; }
 }
 
+/* Google reviews (data: reviews.json, refreshed daily by .github/workflows/google-reviews.yml; embedded fallback below) */
+.reviews { background: var(--bg); border-top: 1px solid var(--line); }
+.rv-top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 36px; }
+.rv-top .head { margin-bottom: 0; }
+.rv-score { display: grid; grid-template-columns: auto auto; align-items: center; gap: 4px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 22px; }
+.rv-score .big { grid-row: span 2; font-family: var(--font-display); font-weight: 700; font-size: 4.2rem; line-height: .9; direction: ltr; }
+.rv-score .meta { color: var(--muted); font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.rv-g { width: 18px; height: 18px; flex: none; }
+.stars { display: inline-flex; gap: 2px; direction: ltr; color: #f5b301; }
+.stars svg { width: 20px; height: 20px; }
+.stars .off { color: var(--surface-2); }
+.rv-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 20px; }
+.rv { background: var(--bg); border: 1px solid var(--line); border-top: 6px solid var(--mint); border-radius: 12px; padding: 22px; display: grid; gap: 12px; align-content: start; box-shadow: 0 20px 40px -32px rgba(44,122,95,.6); transition: transform .3s ease, border-color .3s ease; }
+.rv:hover { transform: translateY(-4px); border-top-color: var(--green); }
+.rv-who { display: flex; align-items: center; gap: 12px; }
+.rv-av { width: 44px; height: 44px; border-radius: 50%; flex: none; display: grid; place-items: center; font-weight: 700; font-size: 1.2rem; color: #fff; background: var(--green); overflow: hidden; }
+.rv-av img { width: 100%; height: 100%; object-fit: cover; }
+.rv-name { font-weight: 700; font-size: 1.08rem; line-height: 1.2; }
+.rv-when { color: var(--muted); font-size: .9rem; }
+.rv-who .rv-g { margin-inline-start: auto; width: 22px; height: 22px; }
+.rv-text { margin: 0; white-space: pre-line; font-size: 1.05rem; line-height: 1.6; }
+.rv-text.clamp { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+.rv-more { justify-self: start; background: none; border: 0; padding: 0; color: var(--accent); font: inherit; font-weight: 700; cursor: pointer; }
+.rv-foot { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+.rv-foot .note { color: var(--muted); font-size: .92rem; }
+@media (max-width: 620px) { .rv-score { width: 100%; box-sizing: border-box; } .rv { padding: 18px; } }
+
 /* Flight path (real sequence) */
 .path { background: var(--surface); border-block: 1px solid var(--line); }
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; counter-reset: step; position: relative; }
@@ -641,6 +668,7 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
       <a href="#home">בית</a>
       <a href="#courses">הקורסים שלנו</a>
       <a href="#about">מי אנחנו</a>
+      <a href="#reviews">לקוחות מספרים</a>
       <a href="#contact">צור קשר</a>
     </nav>
     <a class="btn" href="#contact">הרשמה עכשיו</a>
@@ -651,6 +679,7 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
     <a href="#courses">הקורסים שלנו</a>
     <a href="#quiz">איזה קורס מתאים לי?</a>
     <a href="#about">מי אנחנו</a>
+    <a href="#reviews">לקוחות מספרים</a>
     <a href="#contact">צור קשר</a>
     <a class="btn" href="#contact">הרשמה עכשיו</a>
     <a class="mig" href="https://www.instagram.com/_88academy_/" target="_blank" rel="noopener">האינסטגרם שלנו <span dir="ltr">@_88academy_</span></a>
@@ -868,6 +897,29 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
           <p id="q-text">טיסה דרך משקפי FPV, שערים ומסלולי מרוץ. הדרך הכי מהירה להרגיש כמו טייס אמיתי.</p>
           <a class="btn" href="#contact" id="q-go">להרשמה לקורס הזה</a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reviews" id="reviews" aria-labelledby="rv-title">
+    <div class="wrap">
+      <div class="rv-top">
+        <div class="head">
+          <p class="eyebrow">מה אומרים עלינו</p>
+          <h2 id="rv-title">לקוחות <mark>מספרים</mark></h2>
+          <p>ביקורות אמיתיות של קבוצות ותלמידים שטסו איתנו, ישירות מהפרופיל שלנו בגוגל.</p>
+        </div>
+        <div class="rv-score" aria-live="polite">
+          <span class="big" id="rv-avg">5.0</span>
+          <span class="stars" id="rv-avg-stars" aria-hidden="true"></span>
+          <span class="meta"><svg class="rv-g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.5h7.1c4.2-3.8 6.6-9.5 6.6-16.2z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.5c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.6-3.8-12.3-9.1H4.4v5.7C8 41.1 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.7 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.4C2.9 17.1 2 20.4 2 24s.9 6.9 2.4 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.7c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.1 29.9 2 24 2 15.4 2 8 6.9 4.4 14.1l7.3 5.7c1.7-5.3 6.6-9.1 12.3-9.1z"/></svg><span id="rv-count">2 ביקורות בגוגל</span></span>
+        </div>
+      </div>
+      <div class="rv-list" id="rv-list"></div>
+      <div class="rv-foot">
+        <a class="btn" id="rv-write" href="https://www.google.com/search?q=88ACADEMY" target="_blank" rel="noopener">טסתם איתנו? כתבו לנו ביקורת</a>
+        <a class="btn ghost" id="rv-all" href="https://www.google.com/search?q=88ACADEMY" target="_blank" rel="noopener">לכל הביקורות בגוגל</a>
+        <span class="note">הביקורות מתעדכנות אוטומטית מגוגל.</span>
       </div>
     </div>
   </section>
@@ -1197,6 +1249,79 @@ footer .ig:hover { border-color: var(--accent); background: var(--surface); tran
       })
       .then(function () { btn.disabled = false; });
   });
+})();
+
+// Google reviews: reads reviews.json (kept fresh by a daily GitHub Action), falls back to the reviews below.
+(function () {
+  var list = document.getElementById('rv-list');
+  if (!list) return;
+  var FALLBACK = {
+    rating: 5, total: 2, url: '', writeUrl: '',
+    reviews: [
+      { id: 'fb-1', author: 'מבשרת קצובר', rating: 5, time: '2026-11-05T12:00:00Z',
+        text: 'יהודה וקובי,\nאיזה קורסים מדהימים הבאתם עד אלינו, היתה חוויה מדהימה של הנאה, למידה ומקצועיות, בשני הקורסים, בFPV ובשליטה ברחפנים. איזה כיף לעבוד אתכם, התאמתם הכל לצרכים…' },
+      { id: 'fb-2', author: 'JLM SPARK', rating: 5, time: '2026-11-05T12:00:00Z',
+        text: 'קורסים מצויינים, מקצועיים ומתואמים טוב לקבוצה. הזמנו אותם אלינו למרכז נוער ליזמות וחדשנות בירושלים וקיבלנו מענה מדהים בתוכן, בהדרכה והנוער יצא עם עוד מיומנות חדשה.' }
+    ]
+  };
+  var STAR = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8z"/></svg>';
+  var G = document.querySelector('.rv-score .rv-g').outerHTML;
+  var COLORS = ['#59aa8e', '#c84b6a', '#2c7a5f', '#555765', '#3b82c4', '#b7791f'];
+  function stars(n) { var s = ''; for (var i = 1; i <= 5; i++) s += i <= Math.round(n) ? STAR : STAR.replace('<svg', '<svg class="off"'); return s; }
+  function ago(iso) {
+    var d = (Date.now() - new Date(iso).getTime()) / 86400000;
+    if (!(d >= 0)) return '';
+    if (d < 1) return 'היום';
+    if (d < 2) return 'אתמול';
+    if (d < 7) return 'לפני ' + Math.floor(d) + ' ימים';
+    if (d < 14) return 'לפני שבוע';
+    if (d < 30) return 'לפני ' + Math.floor(d / 7) + ' שבועות';
+    if (d < 60) return 'לפני חודש';
+    if (d < 365) return 'לפני ' + Math.floor(d / 30) + ' חודשים';
+    return d < 730 ? 'לפני שנה' : 'לפני ' + Math.floor(d / 365) + ' שנים';
+  }
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  function render(data) {
+    var rs = (data.reviews || []).filter(function (r) { return r && r.text && r.rating >= 4; });
+    rs.sort(function (a, b) { return new Date(b.time) - new Date(a.time); });
+    if (!rs.length) return false;
+    list.textContent = '';
+    rs.forEach(function (r, i) {
+      var card = el('article', 'rv');
+      var who = el('div', 'rv-who');
+      var av = el('span', 'rv-av');
+      av.style.background = COLORS[i % COLORS.length];
+      if (r.photo) { var im = new Image(); im.src = r.photo; im.alt = ''; im.referrerPolicy = 'no-referrer'; im.loading = 'lazy'; im.onerror = function () { av.textContent = (r.author || '?').trim().charAt(0); }; av.appendChild(im); }
+      else av.textContent = (r.author || '?').trim().charAt(0);
+      var nm = el('div'); nm.appendChild(el('div', 'rv-name', r.author || 'משתמש Google'));
+      var when = el('div', 'rv-when'); var st = el('span', 'stars'); st.innerHTML = stars(r.rating); st.setAttribute('aria-label', r.rating + ' כוכבים');
+      when.appendChild(st); when.appendChild(document.createTextNode(' ' + ago(r.time)));
+      nm.appendChild(when);
+      who.appendChild(av); who.appendChild(nm); who.insertAdjacentHTML('beforeend', G);
+      var p = el('p', 'rv-text', r.text);
+      card.appendChild(who); card.appendChild(p);
+      if (r.text.length > 220) {
+        p.classList.add('clamp');
+        var more = el('button', 'rv-more', 'קראו עוד'); more.type = 'button';
+        more.addEventListener('click', function () { var c = p.classList.toggle('clamp'); more.textContent = c ? 'קראו עוד' : 'הצג פחות'; });
+        card.appendChild(more);
+      }
+      list.appendChild(card);
+    });
+    var avg = data.rating || rs.reduce(function (s, r) { return s + r.rating; }, 0) / rs.length;
+    var total = Math.max(data.total || 0, rs.length);
+    document.getElementById('rv-avg').textContent = Number(avg).toFixed(1);
+    document.getElementById('rv-avg-stars').innerHTML = stars(avg);
+    document.getElementById('rv-count').textContent = total === 1 ? 'ביקורת אחת בגוגל' : total + ' ביקורות בגוגל';
+    if (data.url) document.getElementById('rv-all').href = data.url;
+    if (data.writeUrl) document.getElementById('rv-write').href = data.writeUrl;
+    return true;
+  }
+  render(FALLBACK);
+  if (window.fetch) fetch('reviews.json?v=' + Math.floor(Date.now() / 3600000), { cache: 'no-cache' })
+    .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+    .then(function (d) { render(d); })
+    .catch(function () {});
 })();
 </script>
 
